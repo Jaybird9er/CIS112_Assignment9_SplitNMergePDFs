@@ -13,12 +13,18 @@ from PyPDF2 import PdfFileMerger, PdfFileReader, PdfFileWriter
 from pathlib import Path
 
 """ global variables """
+
 mainPDf = "pythonlearn_ch8MissingPages.pdf"
 insertPDF = "From_pythonlearn_ch8.pdf"
 section1 = PdfFileWriter()
 section2 = PdfFileWriter()
+pdfMerge = PdfFileMerger()
 
 """ functions """
+
+# path contstructor
+def pathBuilder(fileName):
+    return os.path.join(pathlib.Path.cwd(), fileName)
 
 """ 
 `for in` loop gets pages from input file and adds them to output file
@@ -35,11 +41,11 @@ def outputPDF(section):
     with Path (userFileName).open(mode="wb") as outputFile:
         section.write(outputFile)
 
-
 """ main program """
+
 # create section 1 (beginning section)
 userFileName = "section1.pdf"
-main_pdf_path = os.path.join(pathlib.Path.cwd(), mainPDf)
+main_pdf_path = pathBuilder(mainPDf)
 input_pdf = PdfFileReader(main_pdf_path)
 
 getPages(0, 4, section1)
@@ -51,23 +57,13 @@ userFileName = "section2.pdf"
 getPages(4, 12, section2)
 outputPDF(section2)
 
+# list of PDFs
+pdf_list = list((pathBuilder("section1.pdf"), pathBuilder("From_pythonlearn_ch8.pdf"), pathBuilder("section2.pdf")))
 
-
-
-""" Assignment 08
-global variables
-pdfMerge = PdfFileMerger()
-# get directory path and sort PDFs
-pdf_path = pathlib.Path.cwd()
-pdf_list = list(pdf_path.glob("*.pdf"))
-pdf_list.sort()
-
-main program
-# append sorted PDFs
+# append PDF list
 for path in pdf_list:
     pdfMerge.append(str(path))
 
 # write to a new PDF file
 with Path("Merge.pdf").open(mode="wb") as outputFile:
     pdfMerge.write(outputFile)
-"""
